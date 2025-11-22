@@ -33,14 +33,17 @@ df = pd.DataFrame({
 })
 
 if st.button("Predict Salary"):
-    pred = model.predict(df)
+     if b + m + p == 0:
+        st.error("Please select at least one degree (Bachelor, Master, or PhD).")
+     else:
+       pred = model.predict(df)
 
     # FIX: convert prediction (numpy array) → float
-    result = round(float(pred), 2)
+       result = round(float(pred), 2)
 
-    st.success(f"Predicted Salary: {result}")
-    st.balloons()
-    st.snow()
+       st.success(f"Predicted Salary: {result}")
+       st.balloons()
+       st.snow()
 
 
 
