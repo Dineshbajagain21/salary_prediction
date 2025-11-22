@@ -2,26 +2,23 @@ import streamlit as st
 import pandas as pd
 import pickle 
 
-dbfile=open('salary.pickle','rb')
-model=pickle.load(dbfile)
-
+dbfile = open('salary.pickle','rb')
+model = pickle.load(dbfile)
 
 st.title("Salary prediction")
-age = st.number_input("Enter your age",18,60)
-exp=st.number_input("Enter your experience:",0,40)
-gender=st.radio("Gender",["Male","Female"])
-education=st.selectbox("Education",["Bachelor's","Master's","PhD"])
+
+age = st.number_input("Enter your age", 18, 60)
+exp = st.number_input("Enter your experience:", 0, 40)
 gender_option = st.selectbox("Gender", ["Male", "Female"])
 gender = 1 if gender_option == "Male" else 0
 
-b_option = st.checkbox("Bachelor's")
-b = 1 if b_option else 0
+# 🔥 Only one degree can be selected
+education = st.radio("Highest Education", ["Bachelor's", "Master's", "PhD"])
 
-m_option = st.checkbox("Master's")
-m = 1 if m_option else 0
-
-p_option = st.checkbox("PhD")
-p = 1 if p_option else 0
+# Convert to numerical
+b = 1 if education == "Bachelor's" else 0
+m = 1 if education == "Master's" else 0
+p = 1 if education == "PhD" else 0
 
 df = pd.DataFrame({
     "Age": [age],
@@ -33,19 +30,12 @@ df = pd.DataFrame({
 })
 
 if st.button("Predict Salary"):
-     if b + m + p == 0:
-        st.error("Please select at least one degree (Bachelor, Master, or PhD).")
-     else:
-       pred = model.predict(df)
+    pred = model.predict(df)
+    result = round(float(pred), 2)
 
-    # FIX: convert prediction (numpy array) → float
-       result = round(float(pred), 2)
-
-       st.success(f"Predicted Salary: {result}")
-       st.balloons()
-       st.snow()
-
-
+    st.success(f"Predicted Salary: {result}")
+    st.balloons()
+    st.snow()
 
 
 # df=pd.DataFrame({
